@@ -8,38 +8,45 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class JuegosJPAManager {
-    public static final String NOMBRE_UNIDAD_DE_PERSISTENCIA = "JuegosPU";
+    public static final String NOMBRE_UNIDAD_DE_PERSISTENCIA = "Juegos";
     public static final Map<String, EntityManagerFactory> instancies = new HashMap<>();
 
     private JuegosJPAManager() {
     }
 
+    // Comproba se o EntityManagerFactory asociado á unidade de persistencia que se lle pasa
+    // está pechado ou non e se existe
     private static boolean isEntityManagerFactoryClosed(String unidadPersistencia){
         return !instancies.containsKey(unidadPersistencia) || instancies.get(unidadPersistencia) == null
                 || !instancies.get(unidadPersistencia).isOpen();
     }
 
+    // Devolve o EntityManagerFactory asociado á unidade de persistencia
     public static EntityManagerFactory getEntityManagerFactory(String unidadPersistencia){
-        if (isEntityManagerFactoryClosed(unidadPersistencia)){
-            if(isEntityManagerFactoryClosed(unidadPersistencia)){
-                try{
-                    instancies.put(unidadPersistencia, Persistence.createEntityManagerFactory(unidadPersistencia));
-                }catch (Exception e){
-                    System.err.println("Error al crear el EntityManagerFactory: " + e.getMessage());
+        if (isEntityManagerFactoryClosed(unidadPersistencia)) {
+            synchronized (JuegosJPAManager.class) {
+                if (isEntityManagerFactoryClosed(unidadPersistencia)){
+                    try {
+                        instancies.put(unidadPersistencia, Persistence.createEntityManagerFactory(unidadPersistencia));
+                    } catch (Exception e){
+                        System.err.println("Erro ó crear a unidade de persistencia " + unidadPersistencia + ": " + e.getMessage());
+                    }
+
                 }
             }
         }
         return instancies.get(unidadPersistencia);
     }
 
-    public static EntityManager getEntityManager(String unidadPersistencia){
-        return getEntityManagerFactory(unidadPersistencia).createEntityManager();
+    // Devolve o entityManager asociado á unidade de persistencia
+    public static EntityManager getEntityManager (String persistenceUnitName){
+        return getEntityManagerFactory(persistenceUnitName).createEntityManager();
     }
 
-    public static void close(String unidadPersistencia){
-        if (instancies.containsKey(unidadPersistencia)){
-            instancies.get(unidadPersistencia).close();
-            instancies.remove(unidadPersistencia);
+    public static void close(String persistenceUnitName){
+        if (instancies.containsKey(persistenceUnitName)){
+            instancies.get(persistenceUnitName).close();
+            instancies.remove(persistenceUnitName);
         }
     }
 }
