@@ -18,7 +18,6 @@ public class Juego {
     @ManyToOne
     @JoinColumn(name = "idPlataforma")
     private Plataforma plataforma;
-    private String titulo;
     private String miniatura;
     private String estado;
     private String descripcionCorta;
@@ -27,18 +26,17 @@ public class Juego {
     private String editor;
     private String desarrollador;
     private LocalDate fecha;
-    @OneToMany
+    @OneToMany(mappedBy = "juego")  // El campo 'juego' en la clase 'Imagen'
     private List<Imagen> imagenes;
 
     public Juego() {
     }
 
-    public Juego(Long idJuego, String nombre, Genero genero, Plataforma plataforma, String titulo, String miniatura, String estado, String descripcionCorta, String descripcion, String url, String editor, String desarrollador, LocalDate fecha, List<Imagen> imagenes) {
+    public Juego(Long idJuego, String nombre, Genero genero, Plataforma plataforma, String miniatura, String estado, String descripcionCorta, String descripcion, String url, String editor, String desarrollador, LocalDate fecha, List<Imagen> imagenes) {
         this.idJuego = idJuego;
         this.nombre = nombre;
         this.genero = genero;
         this.plataforma = plataforma;
-        this.titulo = titulo;
         this.miniatura = miniatura;
         this.estado = estado;
         this.descripcionCorta = descripcionCorta;
@@ -80,14 +78,6 @@ public class Juego {
 
     public void setGenero(Genero genero) {
         this.genero = genero;
-    }
-
-    public String getTitulo() {
-        return titulo;
-    }
-
-    public void setTitulo(String titulo) {
-        this.titulo = titulo;
     }
 
     public String getMiniatura() {
@@ -169,7 +159,6 @@ public class Juego {
                 ", nombre='" + nombre + '\'' +
                 ", genero=" + genero +
                 ", plataforma=" + plataforma +
-                ", titulo='" + titulo + '\'' +
                 ", miniatura='" + miniatura + '\'' +
                 ", estado='" + estado + '\'' +
                 ", descripcionCorta='" + descripcionCorta + '\'' +

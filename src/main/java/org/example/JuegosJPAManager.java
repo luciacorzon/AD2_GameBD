@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class JuegosJPAManager {
-    public static final String NOMBRE_UNIDAD_DE_PERSISTENCIA = "Juegos";
+    public static final String NOMBRE_UNIDAD_DE_PERSISTENCIA = "juegosH2";
     public static final Map<String, EntityManagerFactory> instancies = new HashMap<>();
 
     private JuegosJPAManager() {

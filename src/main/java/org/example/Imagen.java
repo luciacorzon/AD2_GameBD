@@ -9,9 +9,10 @@ import java.util.Arrays;
 public class Imagen {
     @Id
     private Long idImagen;
-    @OneToOne
-    @JoinColumn(name = "idJuego")
+    @ManyToOne
+    @JoinColumn(name = "Juego_idJuego")  // La columna de clave foránea en la tabla 'Imagen'
     private Juego juego;
+
     private String url;
     private byte[] imagen;
 
